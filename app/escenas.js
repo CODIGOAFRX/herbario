@@ -54,6 +54,7 @@ export function montarAno(seccion, { porMes = 1.5, fundido = 0.12, demora = 0.5 
             el, i, w: porMes,
             centro: el.dataset.estado === 'fruto' ? 0.66 : 0.52,
             nombre: el.querySelector('.mes__nombre'),
+            textos: [...el.querySelectorAll('.mes__cabeza, .etiqueta, .mes__tambien')],
             fases: [...el.querySelectorAll('.fases li')],
             sombra: fig.querySelector('.lamina__sombra'),
             imgs: [], cur: 0, target: 0, visible: false, cargada: i < 2, fase: -1,
@@ -159,11 +160,13 @@ export function montarAno(seccion, { porMes = 1.5, fundido = 0.12, demora = 0.5 
             if (y > s.start - 1.6 * vh && y < s.end + 1.6 * vh) cargar(s);
             const local = clamp((y - s.start) / (s.end - s.start));
             s.target = pausa(local, demora, s.centro);
-            let fuera = 0;
-            if (y < s.start) fuera = s.start - y; else if (y > s.end) fuera = y - s.end;
-            let op = suave(1 - fuera / fade);
+            // Fundido centrado en cada junta: en la junta, los dos meses están a la mitad
+            let op = Math.min(suave((y - (s.start - fade / 2)) / fade), suave((s.end + fade / 2 - y) / fade));
             if ((i === 0 && y < s.start) || (i === N - 1 && y > s.end)) op = 1;   // llega y se va con la sección
             s.el.style.opacity = op;
+            // El texto cambia antes que la lámina: en la junta nunca se leen dos meses a la vez
+            const opTexto = clamp((op - 0.5) * 2).toFixed(3);
+            for (const t of s.textos) t.style.opacity = opTexto;
             // Sin visibility: hidden, para que los lectores de pantalla lean todos los meses
             s.el.style.pointerEvents = op > 0.5 ? 'auto' : 'none';
             s.el.style.zIndex = i === ci ? 2 : 1;
