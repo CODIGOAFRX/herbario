@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Herbario del año · Pedro Gómez</title>
+    <meta name="description" content="Un año de flora española en 36 láminas botánicas antiguas que brotan, florecen, dan fruto y se secan con el scroll. Dime dónde vives y te digo qué florece hoy.">
+    <meta name="theme-color" content="#e9ebe7">
+    <meta property="og:title" content="Herbario del año">
+    <meta property="og:description" content="Doce meses de láminas botánicas antiguas que brotan, florecen, dan fruto y se secan con el scroll.">
+    <meta property="og:image" content="https://www.pedrogomez.dev{{BASE}}/media/portada.jpg">
+    <meta property="og:type" content="website">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="preload" href="fonts/bodoni-moda.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="fonts/spectral.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="herbario.css?v={{v:herbario.css}}">
+    <script type="module" src="herbario.js?v={{v:herbario.js}}"></script>
+</head>
+<body>
+    <a class="saltar" href="#ano">Saltar al año</a>
+
+    <header class="cabecera">
+        <a class="cabecera__volver" href="https://www.pedrogomez.dev/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>Pedro Gómez</a>
+        <a class="cabecera__marca" href="#portada">Herbario del año</a>
+        <nav class="cabecera__nav" aria-label="Secciones">
+            <a href="#ano">El año</a>
+            <a href="#hoy">Qué florece hoy</a>
+            <a href="#herbario">Tu herbario</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="portada" id="portada" aria-labelledby="titulo">
+            <div class="portada__texto">
+                <h1 class="portada__titulo" id="titulo">Herbario <em>del año</em></h1>
+                <p class="portada__sub">Doce meses de flora española en láminas antiguas de dominio público. Baja, y cada planta brota, florece, da fruto y se seca.</p>
+                <p class="portada__hoy" data-hoy hidden></p>
+                <div class="portada__acciones">
+                    <a class="boton boton--tinta" href="#enero">Empezar por enero</a>
+                    <a class="boton boton--linea" href="#hoy">Qué florece hoy</a>
+                </div>
+            </div>
+            <div class="portada__laminas" aria-hidden="true">{{PORTADA}}</div>
+        </section>
+
+        <section class="intro" aria-labelledby="t-intro">
+            <div class="intro__fila">
+                <h2 id="t-intro">Un año en <em>36 láminas</em></h2>
+                <p>Cada mes tiene su planta y dos más que la acompañan. Las láminas salen de floras y herbarios impresos entre 1750 y 1927, y cada una está recortada en capas: la planta entera y las figuras de detalle que el grabador dibujaba aparte.</p>
+            </div>
+            <dl class="intro__datos">
+                <div><dt>Brota</dt><dd>La planta sube desde la raíz, todavía en tinta.</dd></div>
+                <div><dt>Florece</dt><dd>Llega el color, como lo daban a mano los iluminadores.</dd></div>
+                <div><dt>Da fruto</dt><dd>Entran las figuras de detalle: la flor abierta, el fruto, la semilla.</dd></div>
+                <div><dt>Se seca</dt><dd>La lámina amarillea y queda prensada en el pliego.</dd></div>
+            </dl>
+        </section>
+
+        <section class="ano" id="ano" aria-label="El año, mes a mes">
+            <nav class="ruta" aria-label="Meses" hidden><ol>{{RUTA}}</ol></nav>
+            <div class="ano__escenario">
+{{MESES}}
+            </div>
+        </section>
+
+        <section class="hoy" id="hoy" aria-labelledby="t-hoy">
+            <div class="hoy__mando">
+                <h2 id="t-hoy">Qué florece <em>hoy</em></h2>
+                <p class="hoy__intro">Elige dónde vives y la fecha. Las épocas son las de Flora iberica para la península y Baleares; cada año se adelantan o se retrasan con el tiempo que haga.</p>
+                <form class="hoy__form" data-hoy-form>
+                    <fieldset>
+                        <legend>Dónde</legend>
+                        {{REGIONES}}
+                    </fieldset>
+                    <button class="boton boton--linea" type="button" data-ubicacion hidden>Usar mi ubicación</button>
+                    <p class="hoy__aviso" data-ubicacion-aviso aria-live="polite"></p>
+                    <label class="hoy__fecha">Cuándo <input type="date" name="fecha" data-fecha></label>
+                </form>
+                <noscript><p class="hoy__intro">Sin JavaScript no se puede calcular, pero el <a href="#calendario">calendario de floración</a> tiene las mismas fechas.</p></noscript>
+            </div>
+            <div class="hoy__resultado" data-hoy-resultado aria-live="polite"></div>
+        </section>
+
+        <section class="herbario" id="herbario" aria-labelledby="t-herbario">
+            <div class="herbario__texto">
+                <h2 id="t-herbario">Tu <em>herbario</em></h2>
+                <p>Guarda las plantas que veas en flor y móntalas en tu pliego, con su etiqueta. Se queda en este navegador. Puedes descargarlo a color o como una cianotipia, el papel azul con el que Anna Atkins fotografió sus algas en 1843: las plantas quedan en blanco, como su sombra.</p>
+                <form class="herbario__etiqueta" data-etiqueta>
+                    <label>Recogidas por <input name="recolector" autocomplete="name" maxlength="40"></label>
+                    <label>En <input name="lugar" maxlength="40" placeholder="Valle del Jerte, Cáceres…" autocomplete="off"></label>
+                </form>
+                <p class="herbario__aviso" data-herbario-aviso aria-live="polite"></p>
+                <div class="herbario__acciones" data-acciones hidden>
+                    <label class="interruptor"><input type="checkbox" data-cianotipia> Ver como cianotipia</label>
+                    <button class="boton boton--tinta" type="button" data-descargar="color">Descargar a color</button>
+                    <button class="boton boton--linea" type="button" data-descargar="cianotipia">Descargar la cianotipia</button>
+                </div>
+                <noscript><p>El herbario necesita JavaScript para guardar plantas.</p></noscript>
+            </div>
+            <div class="pliego-propio" data-pliego>
+                <p class="pliego-propio__vacio">Todavía no has guardado ninguna planta. Pulsa «Guardar en mi herbario» en una lámina o en lo que florece hoy.</p>
+            </div>
+        </section>
+
+        <section class="calendario" id="calendario" aria-labelledby="t-calendario">
+            <div class="carta">
+                <h2 id="t-calendario">Calendario <em>de floración</em></h2>
+                <p class="carta__nota">Las 36 plantas, en la estación en que empiezan a florecer, con sus meses de flor en cada región.</p>
+{{CALENDARIO}}
+                <p class="carta__cierre">Épocas aproximadas según Flora iberica (Real Jardín Botánico, CSIC).<br>En la montaña dependen de la altitud.</p>
+            </div>
+        </section>
+
+        <section class="laminas" id="laminas" aria-labelledby="t-laminas">
+            <h2 id="t-laminas">Las <em>láminas</em></h2>
+            <ul class="laminas__rejilla">
+{{LAMINAS}}
+            </ul>
+        </section>
+    </main>
+
+    <footer class="pie">
+        <p class="pie__marca">Herbario <em>del año</em></p>
+        <div class="pie__texto">
+            <p>Las láminas son de dominio público y vienen de la Biodiversity Heritage Library. Cada una está recortada en capas por un programa, sin redibujar ni inventar nada. Las épocas de floración son aproximadas, según Flora iberica.</p>
+            <ul class="pie__enlaces">
+                <li><a href="https://www.pedrogomez.dev/">pedrogomez.dev</a></li>
+                <li><a href="https://github.com/CODIGOAFRX/herbario">El código, en GitHub</a></li>
+                <li><a href="https://github.com/CODIGOAFRX/herbario/blob/main/CREDITOS.md">Créditos de las láminas</a></li>
+                <li><a href="https://www.biodiversitylibrary.org/">Biodiversity Heritage Library</a></li>
+            </ul>
+        </div>
+        <p class="pie__firma">Pedro Gómez, 2026 · Bodoni Moda y Spectral, con licencia SIL Open Font License</p>
+    </footer>
+</body>
+</html>

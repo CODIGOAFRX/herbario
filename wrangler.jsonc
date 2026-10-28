@@ -1,0 +1,18 @@
+{
+  "$schema": "https://unpkg.com/wrangler/config-schema.json",
+  "name": "herbario",
+  "compatibility_date": "2026-10-28",
+  "workers_dev": true,
+  // Sólo archivos estáticos: la herramienta y el herbario funcionan en el navegador.
+  "assets": {
+    "directory": "./dist",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "none"
+  },
+  "routes": [
+    { "pattern": "pedrogomez.dev/proyecto/herbario", "zone_name": "pedrogomez.dev" },
+    { "pattern": "pedrogomez.dev/proyecto/herbario/*", "zone_name": "pedrogomez.dev" },
+    { "pattern": "www.pedrogomez.dev/proyecto/herbario", "zone_name": "pedrogomez.dev" },
+    { "pattern": "www.pedrogomez.dev/proyecto/herbario/*", "zone_name": "pedrogomez.dev" }
+  ]
+}

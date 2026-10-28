@@ -1,0 +1,11 @@
+/proyecto/herbario/*
+  Content-Security-Policy: default-src 'self'; script-src 'self'; img-src 'self' data: blob:; connect-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: geolocation=(self), camera=(), microphone=()
+
+/proyecto/herbario/media/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/proyecto/herbario/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
