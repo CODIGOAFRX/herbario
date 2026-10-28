@@ -347,15 +347,15 @@ button { font: inherit; color: inherit; }
     .mes__tambien { grid-column: 1; grid-row: 4; grid-auto-flow: column; justify-content: start; gap: 1.5rem; }
     .mes__tambien img { height: 130px; }
 
-    .ano.con-escenas .mes__escena { grid-template-rows: auto minmax(0, 1fr) auto; align-content: start; padding-bottom: 60px; }
+    .ano.con-escenas .mes__escena { grid-template-rows: auto minmax(0, 1fr); align-content: stretch; padding-bottom: 60px; }
     .ano.con-escenas .mes__luz { margin-top: .3rem; font-size: .95rem; }
     /* La planta llena el hueco: la lámina se amplía hacia su planta y el marco recorta lo que sobra */
-    .ano.con-escenas .marco { grid-row: 2; align-self: stretch; overflow: hidden; margin: 0 calc(-1 * var(--margen)); }
+    .ano.con-escenas .marco { grid-row: 2; align-self: stretch; overflow: hidden; margin: 0 calc(-1 * var(--margen)); transform-origin: 50% 0; will-change: transform; }
     .ano.con-escenas .lamina {
         height: 100%; width: auto; max-width: none;
         transform: translate(calc((0.5 - var(--cx)) * var(--zoom) * 100%), calc((0.5 - var(--cy)) * var(--zoom) * 100%)) scale(var(--zoom));
     }
-    .ano.con-escenas .etiqueta { grid-row: 3; gap: .25rem; }
+    .ano.con-escenas .etiqueta { position: absolute; left: var(--margen); right: var(--margen); bottom: 60px; gap: .25rem; will-change: transform, opacity; }
     .ano.con-escenas .fases { margin-bottom: .4rem; font-size: 1.05rem; }
     .ano.con-escenas .etiqueta__nombre { font-size: 1.9rem; }
     .ano.con-escenas .etiqueta__texto { font-size: 1rem; line-height: 1.5; }

@@ -54,7 +54,10 @@ export function montarAno(seccion, { porMes = 1.5, fundido = 0.12, demora = 0.5 
             el, i, w: porMes,
             centro: el.dataset.estado === 'fruto' ? 0.66 : 0.52,
             nombre: el.querySelector('.mes__nombre'),
-            textos: [...el.querySelectorAll('.mes__cabeza, .etiqueta, .mes__tambien')],
+            textos: [...el.querySelectorAll('.mes__cabeza, .mes__tambien')],
+            etiqueta: el.querySelector('.etiqueta'),
+            marco: el.querySelector('.marco'),
+            opTexto: 1, encoge: 1,
             fases: [...el.querySelectorAll('.fases li')],
             sombra: fig.querySelector('.lamina__sombra'),
             imgs: [], cur: 0, target: 0, visible: false, cargada: i < 2, fase: -1,
@@ -129,6 +132,18 @@ export function montarAno(seccion, { porMes = 1.5, fundido = 0.12, demora = 0.5 
             s.sombra.style.transform = `translate(2.5%, ${(1.5 + (t - 0.5) * 8).toFixed(2)}%) scale(${(1.14 + 0.08 * t).toFixed(3)})`;
         }
         s.nombre.style.transform = vw > 860 ? `translate3d(0, ${((0.5 - t) * 0.08 * vh).toFixed(1)}px, 0)` : '';
+        // En el móvil la lámina ocupa toda la pantalla mientras brota; al florecer se retira hacia
+        // arriba y deja sitio a la etiqueta, que sube desde abajo
+        if (vw <= 860) {
+            const kM = tramo(t, [0.28, 0.42]), kE = tramo(t, [0.36, 0.48]);
+            s.marco.style.transform = `scale(${(1 - (1 - s.encoge) * kM).toFixed(4)})`;
+            s.etiqueta.style.opacity = (kE * s.opTexto).toFixed(3);
+            s.etiqueta.style.transform = `translate3d(0, ${((1 - kE) * 40).toFixed(1)}px, 0)`;
+        } else {
+            s.marco.style.transform = '';
+            s.etiqueta.style.opacity = s.opTexto;
+            s.etiqueta.style.transform = '';
+        }
         marcarFase(s, t < BROTA[1] - 0.02 ? 0 : t < FRUTO[0] + 0.02 ? 1 : t < SECA[0] ? 2 : 3);
     }
 
@@ -147,6 +162,11 @@ export function montarAno(seccion, { porMes = 1.5, fundido = 0.12, demora = 0.5 
         total = off;
         seccion.style.height = `${total * vh + vh}px`;
         arriba = seccion.getBoundingClientRect().top + scrollY;
+        // Cuánto tiene que encoger la lámina en el móvil para dejar sitio a su etiqueta
+        for (const s of SEGMENTOS) {
+            const alto = s.marco.offsetHeight;
+            s.encoge = vw <= 860 && alto ? clamp((alto - s.etiqueta.offsetHeight - 36) / alto, 0.35, 1) : 1;
+        }
         leer();
     }
 
@@ -165,8 +185,9 @@ export function montarAno(seccion, { porMes = 1.5, fundido = 0.12, demora = 0.5 
             if ((i === 0 && y < s.start) || (i === N - 1 && y > s.end)) op = 1;   // llega y se va con la sección
             s.el.style.opacity = op;
             // El texto cambia antes que la lámina: en la junta nunca se leen dos meses a la vez
-            const opTexto = clamp((op - 0.5) * 2).toFixed(3);
-            for (const t of s.textos) t.style.opacity = opTexto;
+            const opTexto = clamp((op - 0.5) * 2);
+            for (const t of s.textos) t.style.opacity = opTexto.toFixed(3);
+            s.opTexto = opTexto;   // paso() la aplica también a la etiqueta
             // Sin visibility: hidden, para que los lectores de pantalla lean todos los meses
             s.el.style.pointerEvents = op > 0.5 ? 'auto' : 'none';
             s.el.style.zIndex = i === ci ? 2 : 1;
