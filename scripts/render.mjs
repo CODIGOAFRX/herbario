@@ -1,4 +1,4 @@
-// Escribe en index.html lo que sale de app/datos/plantas.json: las plantas de la portada, los doce
+// Escribe en index.html lo que sale de app/datos/plantas.json: el año de la portada, los doce
 // meses, la regla del año, las regiones, el calendario y el catálogo. Funciones puras: las usan el
 // build y los tests.
 import { rangoMeses, mesesDeFlor, MESES } from '../app/floracion.js';
@@ -82,14 +82,15 @@ export function ruta(datos) {
     return datos.meses.map(m => `<li><a href="#${m.id}" data-mes="${m.numero}"><span class="ruta__mes">${m.nombre}</span><span class="ruta__inicial" aria-hidden="true">${m.nombre[0]}</span></a></li>`).join('');
 }
 
-// Portada: cuatro plantas recortadas, sueltas sobre el papel
-const PORTADA = ['papaver-rhoeas', 'citrus-aurantium', 'galanthus-nivalis', 'viola-odorata'];
+// Portada: el año de un vistazo. Las doce protagonistas en fila sobre una línea de tierra, como en un
+// estante de especímenes; cada una lleva a su mes. Con JavaScript, sólo el mes de hoy va en color.
 export function portada(datos) {
     const id = porId(datos);
-    return PORTADA.map((pid, k) => {
-        const p = id[pid];
-        return `<figure class="portada__planta portada__planta--${k + 1}"><img src="${media(p.id)}/planta-${k === 0 ? 1400 : 700}.webp" alt="" width="${p.planta.px[0]}" height="${p.planta.px[1]}"${k === 0 ? ' fetchpriority="high"' : ''} decoding="async">` +
-            `<figcaption><i translate="no">${esc(p.latin)}</i> ${esc(p.obra.autor.split(' ').at(-1))}, ${esc(p.obra.anio.slice(0, 4))}</figcaption></figure>`;
+    return datos.meses.map((m, i) => {
+        const p = id[m.plantas[0]];
+        return `<li data-mes="${m.numero}"><a href="#${m.id}">` +
+            `<img src="${media(p.id)}/planta-700.webp" alt="" width="${p.planta.px[0]}" height="${p.planta.px[1]}"${i < 6 ? '' : ' loading="lazy"'} decoding="async">` +
+            `<span class="portada__mes">${m.nombre}</span><span class="sr-only">: ${esc(p.nombre)}</span></a></li>`;
     }).join('');
 }
 

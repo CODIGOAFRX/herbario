@@ -32,15 +32,16 @@
     <main>
         <section class="portada" id="portada" aria-labelledby="titulo">
             <div class="portada__texto">
+                <p class="portada__antetitulo">Doce meses de flora española · Láminas de 1750 a 1927</p>
                 <h1 class="portada__titulo" id="titulo">Herbario <em>del año</em></h1>
-                <p class="portada__sub">Doce meses de flora española en láminas antiguas de dominio público. Baja, y cada planta brota, florece, da fruto y se seca.</p>
+                <p class="portada__sub">Baja, y cada planta brota, florece, da fruto y se seca.</p>
                 <p class="portada__hoy" data-hoy hidden></p>
                 <div class="portada__acciones">
                     <a class="boton boton--tinta" href="#enero">Empezar por enero</a>
                     <a class="boton boton--linea" href="#hoy">Qué florece hoy</a>
                 </div>
             </div>
-            <div class="portada__laminas" aria-hidden="true">{{PORTADA}}</div>
+            <nav class="portada__ano" aria-label="El año, planta a planta"><ol>{{PORTADA}}</ol></nav>
         </section>
 
         <section class="intro" aria-labelledby="t-intro">
