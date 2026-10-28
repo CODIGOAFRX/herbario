@@ -118,7 +118,7 @@ export function montarAno(seccion, { porMes = 1.5, fundido = 0.12, demora = 0.5 
             const lejos = 1 - k3;
             // Suben desde abajo, cada una a su profundidad, sin cruzar la columna del nombre
             // En el móvil apenas viajan: debajo está la etiqueta
-            const viaje = vw > 860 ? 1 : 0.2;
+            const viaje = vw > 860 ? 1 : 0.6;
             const x = lejos * d.dx * 0.08 * vw * d.prof * viaje;
             const y = (lejos * (0.25 + d.dy * 0.3) * vh + deriva + k4 * 0.05 * vh) * d.prof * viaje;
             d.el.style.opacity = (k3 * (1 - 0.55 * k4)).toFixed(3);
@@ -128,7 +128,7 @@ export function montarAno(seccion, { porMes = 1.5, fundido = 0.12, demora = 0.5 
             s.sombra.style.opacity = (k1 * (1 - 0.6 * k4)).toFixed(3);
             s.sombra.style.transform = `translate(2.5%, ${(1.5 + (t - 0.5) * 8).toFixed(2)}%) scale(${(1.14 + 0.08 * t).toFixed(3)})`;
         }
-        if (vw > 860) s.nombre.style.transform = `translate3d(0, ${((0.5 - t) * 0.08 * vh).toFixed(1)}px, 0)`;
+        s.nombre.style.transform = vw > 860 ? `translate3d(0, ${((0.5 - t) * 0.08 * vh).toFixed(1)}px, 0)` : '';
         marcarFase(s, t < BROTA[1] - 0.02 ? 0 : t < FRUTO[0] + 0.02 ? 1 : t < SECA[0] ? 2 : 3);
     }
 

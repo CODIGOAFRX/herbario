@@ -23,7 +23,10 @@ function lamina(p, { carga = 'lazy', clase = 'lamina' } = {}) {
     const detalles = p.detalles.map((d, i) =>
         `<img class="${clase}__detalle" src="${media(p.id)}/detalle-${i + 1}.webp" alt="" width="${d.px[0]}" height="${d.px[1]}"` +
         ` loading="${carga}" decoding="async" style="left:${pct(d.x)};top:${pct(d.y)};width:${pct(d.w)}" data-i="${i}">`).join('');
-    return `<figure class="${clase}" style="aspect-ratio:${w} / ${h}" data-planta="${p.id}">` +
+    // En el móvil la lámina se acerca a su planta: --cx/--cy es el centro de la planta y --zoom lo que
+    // hay que ampliar para que la planta llene el hueco (los detalles de los márgenes quedan fuera)
+    const zoom = Math.min(0.92 / pl.h, 0.96 / pl.w, 1.9).toFixed(3);
+    return `<figure class="${clase}" style="aspect-ratio:${w} / ${h};--cx:${(pl.x + pl.w / 2).toFixed(3)};--cy:${(pl.y + pl.h / 2).toFixed(3)};--zoom:${zoom}" data-planta="${p.id}">` +
         `<div class="${clase}__sombra" style="left:${pct(pl.x)};top:${pct(pl.y)};width:${pct(pl.w)};height:${pct(pl.h)};--recorte:url(${media(p.id)}/planta-700.webp)" aria-hidden="true"></div>` +
         `<img class="${clase}__planta" src="${media(p.id)}/planta-1400.webp" srcset="${media(p.id)}/planta-700.webp 700w, ${media(p.id)}/planta-1400.webp 1400w"` +
         ` sizes="(max-width: 860px) 80vw, 45vw" width="${pl.px[0]}" height="${pl.px[1]}" loading="${carga}" decoding="async"` +
@@ -58,7 +61,7 @@ export function escenas(datos) {
       <h2 class="mes__nombre" id="t-${m.id}">${m.nombre}</h2>
       <p class="mes__luz">${m.estacion} · ${m.luz} de luz el día 15 en Madrid</p>
     </div>
-    ${lamina(prota, { carga: i === 0 ? 'eager' : 'lazy' })}
+    <div class="marco">${lamina(prota, { carga: i === 0 ? 'eager' : 'lazy' })}</div>
     <div class="etiqueta">
       <ol class="fases" aria-label="Fases de la lámina">${FASES.map((f, k) => `<li data-fase="${k}">${f}</li>`).join('')}</ol>
       <p class="etiqueta__latin"><i translate="no">${esc(prota.latin)}</i></p>
